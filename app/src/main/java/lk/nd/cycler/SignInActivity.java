@@ -3,6 +3,7 @@ package lk.nd.cycler;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class SignInActivity extends AppCompatActivity {
     TextView signUpNavigationLink;
+    Button signInBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +27,22 @@ public class SignInActivity extends AppCompatActivity {
             return insets;
         });
 
+        signInBtn = findViewById(R.id.signInBtn);
+
         signUpNavigationLink = findViewById(R.id.signUpNavigationLink);
         signUpNavigationLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(i);
+            }
+        });
+
+        //signin
+        signInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(SignInActivity.this, MainActivity.class);
                 startActivity(i);
             }
         });

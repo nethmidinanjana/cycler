@@ -50,4 +50,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.github.bumptech.glide:glide:4.16.0") // Glide dependency
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0") // For annotation processing
+    implementation("com.google.android.gms:play-services-maps:19.1.0")
 }
