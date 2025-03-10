@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import lk.nd.cycler.R;
@@ -83,6 +85,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @Override
     public int getItemCount() {
         return locationList.size();
+    }
+
+    public void updateList(List<LocationCard> newList) {
+        locationList = new ArrayList<>(newList);
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
