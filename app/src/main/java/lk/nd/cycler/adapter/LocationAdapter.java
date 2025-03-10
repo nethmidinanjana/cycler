@@ -17,7 +17,8 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import lk.nd.cycler.R;
-import lk.nd.cycler.SingleShopViewActivity;
+import lk.nd.cycler.MapViewActivity;
+import lk.nd.cycler.SingleShopView;
 import lk.nd.cycler.model.LocationCard;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
@@ -55,7 +56,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.showMapLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =  new Intent(context, SingleShopViewActivity.class);
+                Intent i =  new Intent(context, MapViewActivity.class);
                 context.startActivity(i);
             }
         });
@@ -63,7 +64,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =  new Intent(context, SingleShopViewActivity.class);
+                Intent i =  new Intent(context, MapViewActivity.class);
                 context.startActivity(i);
             }
         });
@@ -72,28 +73,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             @Override
             public void onClick(View view) {
 
-                Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.rent_now_card);
-                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                dialog.setCancelable(true);
-
-                TextView shopNameTextView = dialog.findViewById(R.id.shopNameDialog);
-                Button placeOrderButton = dialog.findViewById(R.id.placeOrderBtn);
-                ImageView closeButton = dialog.findViewById(R.id.closeIcon);
-                TextView errorText = dialog.findViewById(R.id.errorText);
-
-                errorText.setVisibility(View.INVISIBLE);
-
-                shopNameTextView.setText(location.getShopName());
-
-                closeButton.setOnClickListener(v -> dialog.dismiss());
-
-                placeOrderButton.setOnClickListener(v -> {
-                    Toast.makeText(context, "Order placed for " + location.getShopName(), Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                });
-
-                dialog.show();
+                Intent i = new Intent(context, SingleShopView.class);
+                context.startActivity(i);
             }
         });
 
