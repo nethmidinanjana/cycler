@@ -55,11 +55,13 @@ public class SingleShopView extends AppCompatActivity {
             TextView rating = findViewById(R.id.ratingTextView);
             bicycleCount = findViewById(R.id.bicycleCountTextView);
             ImageView shopImage = findViewById(R.id.shopImageView);
+            TextView pricePerHourTextView = findViewById(R.id.pricePerHourTextView);
 
             shopName.setText(location.getShopName());
             locationText.setText(location.getLocation());
             rating.setText(location.getRating()+" Reviews");
             bicycleCount.setText(location.getBicycleCount()+ " Bicycles Available");
+            pricePerHourTextView.setText("Rs. "+location.getPricePerHour()+".00 /Hour");
 
             Glide.with(this)
                     .load(location.getImageUrl())

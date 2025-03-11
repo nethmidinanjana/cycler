@@ -1,5 +1,7 @@
 package lk.nd.cycler.ui.rentals;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import java.util.List;
 import lk.nd.cycler.R;
 import lk.nd.cycler.adapter.OngoingRentalAdapter;
 import lk.nd.cycler.adapter.PaymentHistoryAdapter;
+import lk.nd.cycler.database.DatabaseHelper;
 import lk.nd.cycler.databinding.FragmentRentalsBinding;
 import lk.nd.cycler.model.OngoingRental;
 import lk.nd.cycler.model.PaymentHistoryCard;
@@ -32,6 +35,8 @@ public class RentalsFragment extends Fragment {
     private RecyclerView paymentHistoryRecyclerView;
     private PaymentHistoryAdapter paymentHistoryAdapter;
     private List<PaymentHistoryCard> paymentHistoryList;
+    private int userId;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,43 +46,63 @@ public class RentalsFragment extends Fragment {
         binding = FragmentRentalsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        userId = (int) sharedPreferences.getLong("user_id", -1);
+
+        // Setup RecyclerView for Ongoing Rentals
         ongoingRentalRecyclerView = root.findViewById(R.id.ongoingRentalRecyclerView);
         ongoingRentalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ongoingRentals = new ArrayList<>();
-        loadOngoingRentalData();
-
-        ongoingRentalAdapter = new OngoingRentalAdapter(getContext(), ongoingRentals);
+        ongoingRentalAdapter = new OngoingRentalAdapter(getContext(), ongoingRentals); // Initialize Adapter
         ongoingRentalRecyclerView.setAdapter(ongoingRentalAdapter);
 
+        // Now load the data
+        loadOngoingRentalData();
 
+        // Setup RecyclerView for Payment History
         paymentHistoryRecyclerView = root.findViewById(R.id.paymentHistoryRecyclerView);
         paymentHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Initialize the list and add sample data
         paymentHistoryList = new ArrayList<>();
-        loadPaymentHistoryData();
-
-        // Set up the adapter
         paymentHistoryAdapter = new PaymentHistoryAdapter(getContext(), paymentHistoryList);
         paymentHistoryRecyclerView.setAdapter(paymentHistoryAdapter);
+
+        loadPaymentHistoryData();
 
         return root;
     }
 
     private void loadOngoingRentalData() {
-        // ongoing rental table should fetch according to the userid and data which's status is pending
-        ongoingRentals.add(new OngoingRental(1, 101, "Kandy Pedal Power Rentals", 5, new Date(System.currentTimeMillis() - 3600000), "Ongoing", 300));
-        ongoingRentals.add(new OngoingRental(2, 102, "Mountain Trail Bikes", 3, new Date(System.currentTimeMillis() - 7200000), "Ongoing", 400));
+        if (ongoingRentalAdapter == null) return;
+
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+
+        ongoingRentals.clear();
+        ongoingRentals.addAll(dbHelper.getOngoingRentalsByUserId(userId));
+
+        ongoingRentalAdapter.notifyDataSetChanged();
     }
 
+
     private void loadPaymentHistoryData() {
-        // Add some sample payment history data
-        paymentHistoryList.add(new PaymentHistoryCard("Kandy Pedal Power Rentals", 3, 1200));
-        paymentHistoryList.add(new PaymentHistoryCard("Hilltop Bike Rentals", 5, 2000));
-        paymentHistoryList.add(new PaymentHistoryCard("Royal Cycle Hire", 2, 1500));
-        paymentHistoryList.add(new PaymentHistoryCard("City Wheels Bicycle Rental", 1, 1100));
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+
+        paymentHistoryList.clear();
+        paymentHistoryList.addAll(dbHelper.getPaymentHistoryByUserId(userId));
+
+        paymentHistoryAdapter.notifyDataSetChanged();
     }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadOngoingRentalData();
+        loadPaymentHistoryData();
+    }
+
 
     @Override
     public void onDestroyView() {

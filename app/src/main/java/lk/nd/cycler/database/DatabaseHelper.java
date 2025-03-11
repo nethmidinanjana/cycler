@@ -10,9 +10,12 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import lk.nd.cycler.model.LocationCard;
+import lk.nd.cycler.model.OngoingRental;
+import lk.nd.cycler.model.PaymentHistoryCard;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -159,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{email});
     }
 
-    // ------------------------ LOCATION METHODS ------------------------
+    // ------------------------ SHOP METHODS ------------------------
 
     // Add location/shop
     public void addLocation(LocationCard location) {
@@ -173,6 +176,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_LATITUDE, location.getLatLng().latitude);
         values.put(COLUMN_LONGITUDE, location.getLatLng().longitude);
         values.put(COLUMN_PRICE_PER_HOUR, location.getPricePerHour());
+
+        Log.d("Database", "Inserting shop: " + location.getShopName() +
+                ", Price per hour: " + location.getPricePerHour());
 
         long result = db.insert(TABLE_SHOP, null, values);
         if (result == -1) {
@@ -260,4 +266,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_RENTAL, values, "id = ?", new String[]{String.valueOf(rentalId)});
         db.close();
     }
+
+    public List<OngoingRental> getOngoingRentalsByUserId(int userId) {
+        List<OngoingRental> rentals = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT * FROM rental WHERE user_id = ? AND status = 'Pending'"; // Adjust column names if needed
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int rentalId = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                int locationId = cursor.getInt(cursor.getColumnIndexOrThrow("shop_id"));
+                String shopName = cursor.getString(cursor.getColumnIndexOrThrow("shop_name"));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("rented_cycle_count"));
+                long rentedDateTime = cursor.getLong(cursor.getColumnIndexOrThrow("rented_date_time"));
+                String status = cursor.getString(cursor.getColumnIndexOrThrow("status"));
+                int paymentPerHour = cursor.getInt(cursor.getColumnIndexOrThrow("payment_per_hour"));
+
+                rentals.add(new OngoingRental(rentalId, locationId, shopName, quantity, new Date(rentedDateTime), status, paymentPerHour));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return rentals;
+    }
+
+    public List<PaymentHistoryCard> getPaymentHistoryByUserId(int userId) {
+        List<PaymentHistoryCard> paymentHistory = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT shop_name, rented_cycle_count, total_paid_amount " +
+                "FROM rental WHERE user_id = ? AND status = 'Completed'";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                String shopName = cursor.getString(cursor.getColumnIndexOrThrow("shop_name"));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("rented_cycle_count"));
+                int totalAmount = cursor.getInt(cursor.getColumnIndexOrThrow("total_paid_amount"));
+
+                paymentHistory.add(new PaymentHistoryCard(shopName, quantity, totalAmount));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return paymentHistory;
+    }
+
+
 }

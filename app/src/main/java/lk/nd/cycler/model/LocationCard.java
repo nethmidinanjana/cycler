@@ -34,6 +34,7 @@ public class LocationCard implements Parcelable {
         bicycleCount = in.readInt();
         imageUrl = in.readString();
         latLng = in.readParcelable(LatLng.class.getClassLoader());
+        pricePerHour = in.readInt();
     }
 
     @Override
@@ -45,7 +46,9 @@ public class LocationCard implements Parcelable {
         dest.writeInt(bicycleCount);
         dest.writeString(imageUrl);
         dest.writeParcelable(latLng, flags);
+        dest.writeInt(pricePerHour);
     }
+
 
     @Override
     public int describeContents() {

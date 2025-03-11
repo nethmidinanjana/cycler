@@ -150,6 +150,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_google_map" />
 
+            <TextView
+                android:id="@+id/pricePerHourTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs. 300.00 / Hour"
+                android:textColor="@color/btn_gold"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/bicycleCountTextView"
+                app:layout_constraintEnd_toEndOf="@+id/ratingTextView"
+                app:layout_constraintTop_toTopOf="@+id/bicycleCountTextView" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
