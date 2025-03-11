@@ -71,11 +71,13 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             }
         });
 
+        //rent now function
         holder.rentNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent i = new Intent(context, SingleShopView.class);
+                i.putExtra("location_data", location);
                 context.startActivity(i);
             }
         });

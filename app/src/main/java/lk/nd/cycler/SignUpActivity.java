@@ -15,7 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import lk.nd.cycler.database.DatabaseHelper;
+import lk.nd.cycler.model.LocationCard;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -97,6 +100,21 @@ public class SignUpActivity extends AppCompatActivity {
                             Toast.makeText(SignUpActivity.this, "Sign up failed!", Toast.LENGTH_LONG).show();
                             signUpBtn.setEnabled(true);
                         } else {
+
+                            DatabaseHelper dbHelper = new DatabaseHelper(SignUpActivity.this);
+
+                            // Adding sample locations when the user signs up
+                            dbHelper.addLocation(new LocationCard(1, "Kandy Pedal Power Rentals", "Peradeniya Road, Kandy", "4.9", 10, "https://i.ibb.co/1Gsqp7Yd/rental-place1.webp", new LatLng(7.2803258713992935, 80.61862439538365), 300));
+                            dbHelper.addLocation(new LocationCard(2, "Hilltop Bike Rentals", "Udawattakele, Kandy", "4.8", 18, "https://i.ibb.co/7JFP3PxF/30-Bicycle-rental-Kyoto-3.webp", new LatLng(7.2993553320926035, 80.64258465440503), 400));
+                            dbHelper.addLocation(new LocationCard(3, "Royal Cycle Hire", "Ampitiya Road, Kandy", "4.7", 12, "https://i.ibb.co/wFqjq803/images.jpg", new LatLng(7.273227833659085, 80.65791322209955), 250));
+                            dbHelper.addLocation(new LocationCard(4, "City Wheels Bicycle Rental", "Near Royal Botanical Gardens, Peradeniya", "4.6", 16, "https://i.ibb.co/WNc17qcr/ODT-Ediz-Hook-credit-lynnette-braillard-1024x777.jpg", new LatLng(7.268121674212818, 80.59670191958945), 330));
+                            dbHelper.addLocation(new LocationCard(5, "Mountain Trail Bikes Kandy", "Kandy City Center Area", "4.9", 21, "https://i.ibb.co/rfbwr649/images-1.jpg", new LatLng(7.2917332431957576, 80.63713951712533), 310));
+                            dbHelper.addLocation(new LocationCard(6, "Ride & Explore Kandy", "Hanthana Road, Kandy", "4.9", 17, "https://i.ibb.co/n8NgQSFV/bike-rentals-768x1152.webp", new LatLng(7.272619564179187, 80.63350916467733), 280));
+                            dbHelper.addLocation(new LocationCard(7, "Pedal Path Bicycle Rentals", "Kandy Lake Round", "4.9", 19, "https://i.ibb.co/jPrYRYnG/40.jpg", new LatLng(7.290003916361178, 80.6427069135332), 300));
+                            dbHelper.addLocation(new LocationCard(8, "Golden Gear Bike Rentals", "Katugastota Road, Kandy", "4.9", 14, "https://i.ibb.co/yF2HrwJ3/33.jpg", new LatLng(7.314000696340381, 80.6320053980566),400));
+                            dbHelper.addLocation(new LocationCard(9, "EcoCycle Rent Kandy", "Senanayake Mawatha, Kandy", "4.9", 18, "https://i.ibb.co/7t7H5N88/Nuwara-Eliya-to-Kandy-Cycling-Tour-4-a931073367.jpg", new LatLng(7.297878803919747, 80.63715853820622), 290));
+                            dbHelper.addLocation(new LocationCard(10, "Green Ride Kandy", "Tennekumbura, Kandy", "4.9", 20, "https://i.ibb.co/Jj8B6fGg/ce.jpg", new LatLng(7.283016289139962, 80.66522333910862), 280));
+
                             Toast.makeText(SignUpActivity.this, "Sign up Success!", Toast.LENGTH_LONG).show();
 
                             sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
