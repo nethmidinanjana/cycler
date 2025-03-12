@@ -235,6 +235,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return locationList;
     }
 
+    public void updateBicycleCount(int shopId, int rentedCycleCount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Get current bicycle count
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_BICYCLE_COUNT + " FROM " + TABLE_SHOP + " WHERE " + COLUMN_ID + " = ?",
+                new String[]{String.valueOf(shopId)});
+
+        if (cursor.moveToFirst()) {
+            int currentCount = cursor.getInt(0);
+            int newCount = currentCount + rentedCycleCount; // Increment bicycle count
+
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_BICYCLE_COUNT, newCount);
+
+            db.update(TABLE_SHOP, values, COLUMN_ID + " = ?", new String[]{String.valueOf(shopId)});
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+
     // ------------------------ RENTAL METHODS ------------------------
 
     // Insert rental data
@@ -256,12 +278,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Update rental amount and time
-    public void updateRentalAmountAndTime(int rentalId, int hourCount, int totalAmount) {
+    public void updateRentalStatusAndPayment(int rentalId, int hourCount, int totalAmount) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("hour_count", hourCount);
         values.put("total_paid_amount", totalAmount);
+        values.put("status", "Completed");
 
         db.update(TABLE_RENTAL, values, "id = ?", new String[]{String.valueOf(rentalId)});
         db.close();
