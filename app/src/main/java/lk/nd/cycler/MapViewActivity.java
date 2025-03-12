@@ -1,7 +1,9 @@
 package lk.nd.cycler;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -25,6 +27,8 @@ public class MapViewActivity extends AppCompatActivity {
 
     MapView shopMapView;
     GoogleMap gMap;
+    LatLng shopLatLng;
+    String shopName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,32 +43,60 @@ public class MapViewActivity extends AppCompatActivity {
 
         shopMapView = findViewById(R.id.shopMapView);
 
-        SupportMapFragment supportMapFragment = new SupportMapFragment();
+        Intent intent = getIntent();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        shopName = intent.getStringExtra("shopName");
 
-        fragmentTransaction.add(R.id.shopMapView, supportMapFragment);
-        fragmentTransaction.commit();
+        String latStr = intent.getStringExtra("latitude");
+        String lngStr = intent.getStringExtra("longitude");
 
-        LatLng latLng = new LatLng(7.281592308116109, 80.62051267044853);
+        if (latStr != null && lngStr != null) {
+            try {
+                double latitude = Double.parseDouble(latStr);
+                double longitude = Double.parseDouble(lngStr);
+                shopLatLng = new LatLng(latitude, longitude);
 
-        supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(@NonNull GoogleMap googleMap) {
-                Log.i("Map", "Map is ready.");
+                Log.d("MapViewActivity", "Received Latitude: " + latitude + ", Longitude: " + longitude);
+                // Now use shopLatLng to display on the map
 
-                googleMap.addMarker(
-                        new MarkerOptions()
-                                .position(latLng)
-                                .title("Kandy Pedal Power Rentals")
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
-                );
-
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
-
-                googleMap.getUiSettings().setZoomControlsEnabled(true);
+            } catch (NumberFormatException e) {
+                Log.e("MapViewActivity", "Invalid Latitude/Longitude format", e);
             }
-        });
+        } else {
+            Log.e("MapViewActivity", "Latitude or Longitude data missing");
+        }
+
+        // Only proceed if shopLatLng is valid
+        if (shopLatLng != null) {
+            SupportMapFragment supportMapFragment = new SupportMapFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.shopMapView, supportMapFragment);
+            fragmentTransaction.commit();
+
+            supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(@NonNull GoogleMap googleMap) {
+                    Log.i("Map", "Map is ready.");
+
+                    if (shopLatLng != null) {  // Ensure it's not null before using it
+                        googleMap.addMarker(
+                                new MarkerOptions()
+                                        .position(shopLatLng)
+                                        .title(shopName)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
+                        );
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(shopLatLng, 20));
+                    } else {
+                        Log.e("Map", "shopLatLng is null. Cannot place marker.");
+                    }
+
+                    googleMap.getUiSettings().setZoomControlsEnabled(true);
+                }
+            });
+        } else {
+            Toast.makeText(this, "Invalid location data received", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

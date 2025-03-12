@@ -3,6 +3,7 @@ package lk.nd.cycler.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +56,30 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
                 .placeholder(R.mipmap.rental_place1) // Fallback image
                 .into(holder.image);
 
+
+        LatLng latLng = location.getLatLng();
+        if (latLng == null) {
+            Log.i("LatLng", "No LatLng data received for: " + location.getShopName());
+        } else {
+            Log.i("LatLng", "LatLng found for: " + location.getShopName() + " - " + latLng.latitude + "," + latLng.longitude);
+        }
+
         //go to map view
         holder.showMapLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =  new Intent(context, MapViewActivity.class);
+                Intent i = new Intent(context, MapViewActivity.class);
+
+                if (latLng != null) {
+                    Log.i("Adapter", "Passing Latitude: " + latLng.latitude + ", Longitude: " + latLng.longitude);
+                    i.putExtra("latitude", String.valueOf(latLng.latitude));
+                    i.putExtra("longitude", String.valueOf(latLng.longitude));
+                    i.putExtra("shopName", location.getShopName());
+
+                } else {
+                    Log.i("Adapter", "LatLng is NULL for " + location.getShopName());
+                }
+
                 context.startActivity(i);
             }
         });
@@ -66,10 +87,23 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =  new Intent(context, MapViewActivity.class);
+                Log.i("Adapter", "Image clicked for: " + location.getShopName());
+                Intent i = new Intent(context, MapViewActivity.class);
+
+                if (latLng != null) {
+                    Log.i("Adapter", "Passing Latitude: " + latLng.latitude + ", Longitude: " + latLng.longitude);
+                    i.putExtra("latitude", String.valueOf(latLng.latitude));
+                    i.putExtra("longitude", String.valueOf(latLng.longitude));
+                    i.putExtra("shopName", location.getShopName());
+
+                } else {
+                    Log.i("Adapter", "LatLng is NULL for " + location.getShopName());
+                }
+
                 context.startActivity(i);
             }
         });
+
 
         //rent now function
         holder.rentNowBtn.setOnClickListener(new View.OnClickListener() {

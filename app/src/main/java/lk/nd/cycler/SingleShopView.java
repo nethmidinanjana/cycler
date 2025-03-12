@@ -33,6 +33,7 @@ public class SingleShopView extends AppCompatActivity {
     LocationCard location;
     int locationId;
     TextView bicycleCount;
+    int locationQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class SingleShopView extends AppCompatActivity {
 
         location = getIntent().getParcelableExtra("location_data");
         locationId = location.getId();
+        locationQty = location.getBicycleCount();
 
         if (location != null) {
             // Example of setting data in UI
@@ -75,9 +77,6 @@ public class SingleShopView extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
 
         userId = sharedPreferences.getLong("user_id", -1);
-        String username = sharedPreferences.getString("username", "");
-        String email = sharedPreferences.getString("email", "");
-        String mobile = sharedPreferences.getString("mobile", "");
 
         placeOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +90,9 @@ public class SingleShopView extends AppCompatActivity {
 
                     if(quantity == 0){
                         Toast.makeText(SingleShopView.this, "Quantity can not be zero.", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else if (locationQty < quantity) {
+                        Toast.makeText(SingleShopView.this, "Insufficient Quantity", Toast.LENGTH_SHORT).show();
+                    } else{
                         placeOrderBtn.setEnabled(false);
 
                         long rentedDateTime = System.currentTimeMillis();  // Set the current time

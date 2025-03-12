@@ -227,8 +227,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 } else {
                     Log.e("Database", "One or more columns are missing in the result set.");
                 }
+
             } while (cursor.moveToNext());
         }
+
         cursor.close();
 
         db.close();
