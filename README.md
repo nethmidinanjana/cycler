@@ -20,7 +20,7 @@ This is a **Bicycle Renting Application** built with **Android Studio using pure
 ## 🚀 Installation & Setup
 ```sh
 # Clone the repository
-git clone https://github.com/yourusername/bicycle-renting-app.git
+git clone https://github.com/nethmidinanjana/cycler.git
 
 # Open in Android Studio
 
