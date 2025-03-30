@@ -45,7 +45,7 @@ git clone https://github.com/nethmidinanjana/cycler.git
 
 ## 📸 Screenshots
 
-<img src="assets/1.png" width="300" style="display:inline-block; margin-right: 10px;" />
-<img src="assets/2.png" width="300" style="display:inline-block; margin-right: 10px;" />
-<img src="assets/3.png" width="300" style="display:inline-block;" />
+<img src="assets/1.png" width="300" style="display:inline; margin-right: 10px;" />
+<img src="assets/2.png" width="300" style="display:inline; margin-right: 10px;" />
+<img src="assets/3.png" width="300" style="display:inline;" />
 
