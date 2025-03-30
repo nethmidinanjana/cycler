@@ -47,9 +47,10 @@ git clone https://github.com/nethmidinanjana/cycler.git
 
 ## 📸 Screenshots
 
-<div style="display: flex; gap: 10px;">
-  <img src="assets/1.png" width="250" />
-  <img src="assets/2.png" width="250" />
+<div style="display: flex;">
+  <img src="assets/1.png" width="250" style="margin-right: 10px;" />
+  <img src="assets/2.png" width="250" style="margin-right: 10px;" />
   <img src="assets/3.png" width="250" />
 </div>
+
 
