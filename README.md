@@ -43,4 +43,14 @@ git clone https://github.com/nethmidinanjana/cycler.git
 - All **transactions are handled securely** via PayHere.
 - **User data is stored locally** using SQLite.
 
+## 📸 Screenshots
+
+### Screenshot 1
+![Screenshot 1](assets/1.png)
+
+### Screenshot 2
+![Screenshot 2](assets/2.png)
+
+### Screenshot 3
+![Screenshot 2](assets/3.png)
 
