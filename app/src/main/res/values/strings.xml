@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Cycler</string>
-    <string name="API_KEY">AIzaSyAsDNjjDZk7Z1Bj1xMMlJodaCk1T_luEk8</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_profile">Profile</string>
