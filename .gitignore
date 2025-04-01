@@ -14,6 +14,5 @@
 .cxx
 local.properties
 
-# === SECRET FILES (🔥 Hide sensitive data like API keys) ===
 app/src/main/res/values/secrets.xml
 app/src/main/java/lk/nd/cycler/Constants.java
